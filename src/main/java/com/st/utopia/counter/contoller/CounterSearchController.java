@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 public class CounterSearchController {
 
 	@Autowired
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Value("${utopia.search-service-hostName}")
 	private String hostName;

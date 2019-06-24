@@ -25,7 +25,7 @@ import com.st.utopia.counter.entity.Ticket;
 public class CounterCancellationController {
 
 	@Autowired
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Value("${utopia.cancellation-service-hostName}")
 	private String hostName;

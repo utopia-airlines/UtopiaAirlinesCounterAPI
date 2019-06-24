@@ -25,7 +25,7 @@ import com.st.utopia.counter.entity.User;
 public class CounterBookingController {
 
 	@Autowired
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	@Value("${utopia.booking-service-hostName}")
 	private String hostName;
