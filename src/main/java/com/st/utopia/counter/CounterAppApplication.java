@@ -13,7 +13,7 @@ public class CounterAppApplication {
 	}
 
 	@Bean
-	public RestTemplate getRestTemnplate() {
+	public RestTemplate getRestTemplate() {
 		return new RestTemplate();
 	}
 

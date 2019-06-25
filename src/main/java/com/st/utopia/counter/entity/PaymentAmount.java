@@ -10,11 +10,11 @@ public class PaymentAmount {
 	/**
 	 * The amount paid.
 	 */
-	private int price;
+	private Integer price;
 	/**
 	 * @return the amount paid
 	 */
-	public int getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 }

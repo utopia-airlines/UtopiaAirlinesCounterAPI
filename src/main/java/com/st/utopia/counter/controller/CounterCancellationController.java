@@ -1,4 +1,4 @@
-package com.st.utopia.counter.contoller;
+package com.st.utopia.counter.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,18 +27,12 @@ public class CounterCancellationController {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Value("${utopia.cancellation-service-hostName}")
-	private String hostName;
-
-	@Value("${utopia.cancellation-service-port}")
-	private String port;
-
-	@Value("${utopia.cancellation-service-controller-root}")
-	private String root;
+	@Value("${utopia.cancellation.API}")
+	private String cancellationAPI;
 
 	@PutMapping("/cancel/ticket/booking-id/{bookingId}")
 	public ResponseEntity<Ticket> cancelReservationByBookingId(@PathVariable String bookingId) {
-		restTemplate.put("http://" + hostName + ":" + port + root + "/ticket/booking-id/" + bookingId, null);
+		restTemplate.put(cancellationAPI + "/ticket/booking-id/" + bookingId, null);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 	}
@@ -46,9 +40,7 @@ public class CounterCancellationController {
 	@PutMapping("/cancel/ticket/flight/{flightNumber}/row/{rowNumber}/seat/{seat}")
 	public ResponseEntity<Ticket> cancelReservationByID(@PathVariable("flightNumber") final int flight,
 			@PathVariable("rowNumber") final int row, @PathVariable("seat") final char seat) {
-		restTemplate.put(
-				"http://" + hostName + ":" + port + root + "/ticket/flight/" + flight + "/row/" + row + "/seat/" + seat,
-				null);
+		restTemplate.put(cancellationAPI + "/ticket/flight/" + flight + "/row/" + row + "/seat/" + seat, null);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 	}
