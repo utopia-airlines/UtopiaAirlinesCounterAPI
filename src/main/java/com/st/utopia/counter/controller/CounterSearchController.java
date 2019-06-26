@@ -44,7 +44,6 @@ public class CounterSearchController {
 	 */
 	@GetMapping("/flights")
 	public ResponseEntity<Flight> getAllflight() {
-		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/flights";
 		return this.<Flight>methodCall(url, HttpMethod.GET);
 	}
@@ -58,7 +57,6 @@ public class CounterSearchController {
 	 */
 	@GetMapping("/flight/{flightId}")
 	public ResponseEntity<Flight> getAllflightsWithId(@PathVariable final String flightId) {
-		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/flightDetails?flight=" + flightId;
 		return this.<Flight>methodCall(url, HttpMethod.GET);
 	}
@@ -70,7 +68,6 @@ public class CounterSearchController {
 	 */
 	@GetMapping("/airports")
 	public ResponseEntity<Airport> getAllAirports() {
-		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/airports";
 		return this.<Airport>methodCall(url, HttpMethod.GET);
 	}
@@ -84,7 +81,6 @@ public class CounterSearchController {
 	 */
 	@GetMapping("/airport/{code}")
 	public ResponseEntity<Airport> getAllAirportsWithId(@PathVariable final String code) {
-		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/airportDetails?airport=" + code;
 		return this.<Airport>methodCall(url, HttpMethod.GET);
 	}
