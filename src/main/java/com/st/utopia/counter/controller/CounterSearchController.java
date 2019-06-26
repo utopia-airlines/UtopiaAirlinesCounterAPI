@@ -56,7 +56,7 @@ public class CounterSearchController {
 	 * 
 	 * @return list of airports
 	 */
-	@GetMapping("/flights/{flightId}")
+	@GetMapping("/flight/{flightId}")
 	public ResponseEntity<Flight> getAllflightsWithId(@PathVariable final String flightId) {
 		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/flightDetails?flight=" + flightId;
@@ -82,7 +82,7 @@ public class CounterSearchController {
 	 * 
 	 * @return list of airports
 	 */
-	@GetMapping("/airports/{code}")
+	@GetMapping("/airport/{code}")
 	public ResponseEntity<Airport> getAllAirportsWithId(@PathVariable final String code) {
 		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/airportDetails?airport=" + code;

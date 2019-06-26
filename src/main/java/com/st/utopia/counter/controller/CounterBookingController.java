@@ -37,42 +37,43 @@ public class CounterBookingController {
 
 	@Value("${utopia.cancellation.API}")
 	private String cancellationAPI;
-	
+
 	/**
-	 * Helper method to reduce the amount of repetitive code required for a method call.
-	 * methods.
+	 * Helper method to reduce the amount of repetitive code required for a method
+	 * call.
+	 * 
 	 * @param url the URL to send the REST request to
-	 * @param <T> the type we expect
+	 * @param     <T> the type we expect
 	 * @return the response the server sent
 	 */
 	private <T> ResponseEntity<T> methodCall(final String url, final HttpMethod method) {
-		return restTemplate.exchange(url, method, null,
-				new ParameterizedTypeReference<T>() {});
+		return restTemplate.exchange(url, method, null, new ParameterizedTypeReference<T>() {
+		});
 	}
-	
+
 	/**
-	 * Helper method to reduce the amount of repetitive code required for a method call.
-	 * @param url the URL to send the REST request to
-	 * @param type of method to send the REST request to
+	 * Helper method to reduce the amount of repetitive code required for a method
+	 * call.
+	 * 
+	 * @param url        the URL to send the REST request to
+	 * @param type       of method to send the REST request to
 	 * @param HttpEntity to send in the REST request
-	 * @param <T> the type we expect
-	 * @param <U> the type of the body sent to the server
+	 * @param            <T> the type we expect
+	 * @param            <U> the type of the body sent to the server
 	 * @return the response the server sent
 	 */
-	private <T, U> ResponseEntity<T> methodCall(final String url, final HttpMethod method,
-			final HttpEntity<U> body) {
-		return restTemplate.exchange(url, method, body,
-				new ParameterizedTypeReference<T>() {});
+	private <T, U> ResponseEntity<T> methodCall(final String url, final HttpMethod method, final HttpEntity<U> body) {
+		return restTemplate.exchange(url, method, body, new ParameterizedTypeReference<T>() {
+		});
 	}
 
 	/**
 	 * Get list of seats on a given flight
 	 * 
-	 * @return list of seats
+	 * @return list of seats of a given flight
 	 */
 	@GetMapping("/flight/{flightId}/seats")
-	public ResponseEntity<TicketIdentity> getAllSeatsWithPlan(
-			@PathVariable final String flightId) {
+	public ResponseEntity<TicketIdentity> getAllSeatsOfFlight(@PathVariable final String flightId) {
 		// FIXME: Search service doesn't yet provide this
 		String url = searchAPI + "/seats?flight=" + flightId;
 		return this.<TicketIdentity>methodCall(url, HttpMethod.GET);
@@ -81,79 +82,68 @@ public class CounterBookingController {
 	/**
 	 * Get a ticket given a flightId, row and seat
 	 * 
-	 * @param flightId	the flight identifier
-	 * @param row 		the row in the flight
-	 * @param seatId 	the seat letter
-	 * @return a ticket
+	 * @param flightId the flight identifier
+	 * @param row      the row in the flight
+	 * @param seatId   the seat letter
+	 * @return the ticket corresponding to the given seat on the given flight
 	 */
 	@GetMapping("/flight/{flightId}/seat/{row}/{seatId}")
-	public ResponseEntity<Ticket> getTicket(
-			@PathVariable final int flightId, @PathVariable final int row,
+	public ResponseEntity<Ticket> getTicket(@PathVariable final int flightId, @PathVariable final int row,
 			@PathVariable final String seatId) {
-		String url = bookingAPI + "/details/flights/" + flightId + "/rows/" +
-				row + "/seats/" + seatId;
+		String url = bookingAPI + "/details/flights/" + flightId + "/rows/" + row + "/seats/" + seatId;
 		return this.<Ticket>methodCall(url, HttpMethod.GET);
 	}
 
 	/**
 	 * Pay the price for ticket or extend the time
 	 * 
-	 * @return a ticket or an object
+	 * @return the updated details of the ticket
 	 */
 	@PutMapping("/flight/{flightId}/seat/{row}/{seatId}/ticket")
-	public ResponseEntity<Object> updateTicket(
-			@PathVariable final int flightId, @PathVariable final int row,
+	public ResponseEntity<Object> updateTicket(@PathVariable final int flightId, @PathVariable final int row,
 			@PathVariable final String seatId, @RequestBody final PaymentAmount pay) {
 		// may need to just create a new object
 		if (pay.getPrice() == null) {
-			HttpEntity<PaymentAmount> body = new HttpEntity<>(pay);
-			String url = bookingAPI + "/pay/flights/" + flightId + "/rows/" +
-				row + "/seats/" + seatId;
-			return this.<Object, PaymentAmount>methodCall(url, HttpMethod.PUT, body);
-		} else {
-			String url = bookingAPI + "/extend/flights/" + flightId + "/rows/" +
-				row + "/seats/" + seatId;
+			String url = bookingAPI + "/extend/flights/" + flightId + "/rows/" + row + "/seats/" + seatId;
 			return this.<Object>methodCall(url, HttpMethod.PUT);
+		} else {
+			HttpEntity<PaymentAmount> body = new HttpEntity<>(pay);
+			String url = bookingAPI + "/pay/flights/" + flightId + "/rows/" + row + "/seats/" + seatId;
+			return this.<Object, PaymentAmount>methodCall(url, HttpMethod.PUT, body);
 		}
 	}
 
 	/**
 	 * Book flight
 	 * 
-	 * @return a Ticket
+	 * @return the reserved Ticket with the details
 	 */
 	@PostMapping("/flight/{flightId}/seat/{row}/{seatId}/ticket")
-	public ResponseEntity<Ticket> postTicket(
-			@PathVariable final int flightId, @PathVariable final int row,
+	public ResponseEntity<Ticket> postTicket(@PathVariable final int flightId, @PathVariable final int row,
 			@PathVariable final String seatId, @RequestBody final User reserver) {
-		String url = bookingAPI + "/book/flights/" + flightId + "/rows/" +
-			row + "/seats/" + seatId;
-		return this.<Ticket, User>methodCall(url, HttpMethod.POST,
-				new HttpEntity<>(reserver));
+		String url = bookingAPI + "/book/flights/" + flightId + "/rows/" + row + "/seats/" + seatId;
+		return this.<Ticket, User>methodCall(url, HttpMethod.POST, new HttpEntity<>(reserver));
 	}
 
 	/**
 	 * Cancel a flight if it exists
 	 * 
-	 * @return a Ticket
+	 * @return the cancelled Ticket with details
 	 */
 	@DeleteMapping("/flight/{flightId}/seat/{row}/{seatId}/ticket")
-	public ResponseEntity<Ticket> deleteTicket(
-			@PathVariable final int flightId, @PathVariable final int row,
+	public ResponseEntity<Ticket> deleteTicket(@PathVariable final int flightId, @PathVariable final int row,
 			@PathVariable final String seatId) {
-		String url = cancellationAPI + "/ticket/flight/" + flightId + "/row/" +
-				row + "/seat/" + seatId;
+		String url = cancellationAPI + "/ticket/flight/" + flightId + "/row/" + row + "/seat/" + seatId;
 		return this.<Ticket>methodCall(url, HttpMethod.PUT);
 	}
 
 	/**
 	 * Get list of tickets for a given bookingCode
 	 * 
-	 * @return list of tickets
+	 * @return the ticket of the given bookingCode with details
 	 */
 	@GetMapping("/booking/{bookingCode}")
-	public ResponseEntity<Ticket> getTicketWithBookingCode(
-			@PathVariable final String bookingCode) {
+	public ResponseEntity<Ticket> getTicketWithBookingCode(@PathVariable final String bookingCode) {
 		String url = bookingAPI + "/details/bookings/" + bookingCode;
 		return this.<Ticket>methodCall(url, HttpMethod.GET);
 	}
@@ -161,27 +151,26 @@ public class CounterBookingController {
 	/**
 	 * Pay for the ticket or extend the timeout
 	 * 
-	 * @return updated ticket
+	 * @return the updated ticket with details
 	 */
 	@PutMapping("/booking/{bookingCode}")
-	public ResponseEntity<Ticket> putBookingCode(
-			@PathVariable final String bookingCode, @RequestBody final PaymentAmount pay) {
-		if (pay.getPrice() != null) {
+	public ResponseEntity<Ticket> putBookingCode(@PathVariable final String bookingCode,
+			@RequestBody final PaymentAmount pay) {
+		if (pay.getPrice() == null) {
+			String url = bookingAPI + "/extend/bookings/" + bookingCode;
+			return this.<Ticket>methodCall(url, HttpMethod.PUT);
+		} else {
 			String url = bookingAPI + "/pay/bookings/" + bookingCode;
 			HttpEntity<PaymentAmount> body = new HttpEntity<>(pay);
 			return this.<Ticket, PaymentAmount>methodCall(url, HttpMethod.PUT, body);
-		} else {
-			String url = bookingAPI + "/extend/bookings/" + bookingCode;
-			return this.<Ticket>methodCall(url, HttpMethod.PUT);
 		}
 	}
 
 	/**
-	 * Cancel reservation
+	 * Cancel reservation by bookingCode
 	 */
 	@DeleteMapping("/booking/{bookingCode}")
-	public ResponseEntity<Object> deleteReservation(
-			@PathVariable final String bookingCode) {
+	public ResponseEntity<Object> deleteReservation(@PathVariable final String bookingCode) {
 		String url = cancellationAPI + "/ticket/booking-id/" + bookingCode;
 		return this.<Object>methodCall(url, HttpMethod.PUT);
 	}
