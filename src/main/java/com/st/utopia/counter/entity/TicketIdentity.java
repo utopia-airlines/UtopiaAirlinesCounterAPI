@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A class to be the primary key of a {@link Ticket} for JPA, which requires
- * every Entity to have a single primary key.
- *
  * Declared to implement Serializable because "Composite-id class must implement
  * Serializable."
  *

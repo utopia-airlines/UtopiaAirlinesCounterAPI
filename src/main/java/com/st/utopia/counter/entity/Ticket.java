@@ -3,6 +3,8 @@ package com.st.utopia.counter.entity;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A Ticket model.
  *
@@ -27,7 +29,8 @@ public class Ticket {
 	 * The three fields that together constitute the identity of a Ticket.
 	 */
 	private TicketIdentity id;
-
+	
+	@JsonProperty("class")
 	private Integer tier; // class is a keyword
 
 	private Integer reserver;
