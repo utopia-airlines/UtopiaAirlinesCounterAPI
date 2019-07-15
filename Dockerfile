@@ -3,4 +3,4 @@ WORKDIR /
 COPY counter-0.0.1-SNAPSHOT.jar app.jar
 COPY script.sh script.sh
 EXPOSE 8080
-ENTRYPOINT [ "sh","./script.sh" ]
+ENTRYPOINT [ "./script.sh" ]
