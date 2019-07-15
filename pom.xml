@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.st.utopia</groupId>
-	<artifactId>conter</artifactId>
+	<artifactId>counter</artifactId>
 	<version>0.0.0.${v}</version>
 	<name>UtopiaCounter</name>
 	<description>Utopia Airlines Counter API</description>
