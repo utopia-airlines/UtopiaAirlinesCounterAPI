@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.st.utopia</groupId>
 	<artifactId>counter</artifactId>
-	<version>0.0.0.${v}</version>
+	<version>0.0.0.${v}-QA</version>
 	<name>UtopiaCounter</name>
 	<description>Utopia Airlines Counter API</description>
 
